@@ -1,0 +1,13 @@
+#指定数据源：Druid
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource #Druid连接池
+    driver-class-name: com.mysql.jdbc.Driver #驱动
+    url: jdbc:mysql://127.0.0.1:3306/hw05?useSSL=false  #URL连接字符串
+    username: root     #登录名
+    password: root  #密码
+
+# SQL日志
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

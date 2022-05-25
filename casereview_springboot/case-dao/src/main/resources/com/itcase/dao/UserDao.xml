@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itcase.dao.UserDao">
+<!--    配置查询结果和实体类之间的映射-->
+    <resultMap id="queryUserByPageResuletMap" type="com.itcase.pojo.User" autoMapping="true">
+<!--        配置用户数据和User之间的映射 -->
+        <id property="id" column="uid" ></id>
+<!--        一对多，配置实体类Role和表-->
+        <collection property="roleList" ofType="com.itcase.pojo.Role" autoMapping="true" >
+                <id property="id" column="rid"></id>
+        </collection>
+
+    </resultMap>
+    <select id="queryUserByPage" resultMap="queryUserByPageResuletMap">
+
+        select tu.id uid,
+               tu.username,
+               tu.password,
+               tu.email,
+               tu.createTime,
+               tu.updateTime,
+               tu.remark,
+               tr.id rid,
+               tr.name,
+               tr.description,
+               tr.keyword
+        from (select * from t_user
+            <if test="searchParams != null and searchParams.trim()!='' ">
+                where t_user.username like concat('%',#{searchParams},'%')
+            </if>
+            limit #{index},#{pageSize}) as tu
+                 join t_user_role tur
+                      on tur.user_id = tu.id
+                 join t_role tr
+                      on tur.role_id = tr.id;
+    </select>
+</mapper>
